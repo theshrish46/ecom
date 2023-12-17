@@ -17,11 +17,10 @@ const generateAccessRefreshTokens = async (userId) => {
     } catch (error) {
         throw new ApiError(400, "Something went wrong while generating the Tokens", error)
     }
-
-
 }
 
 const register = async (req, res) => {
+    // TODO:;  Comple the work ASAP and get it pushed to the github
     const { name, username, email, password } = req.body
     console.log(name, username, email, password)
     if (!name || !username || !email || !password) {
@@ -95,4 +94,28 @@ const login = asyncHandler(async (req, res) => {
 
 })
 
-export { register, login }
+const logout = asyncHandler(async (req, res) => {
+    await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set: {
+                refreshToken: "",
+            },
+        },
+        {
+            new: true
+        }
+    )
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
+
+    return res
+        .status(200)
+        .clearCookie("accessToken", options)
+        .clearCookie("refreshToken", options)
+        .json(new ApiResponse(200, "User successfully logged out"))
+})
+
+export { register, login, logout }
