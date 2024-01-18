@@ -7,7 +7,7 @@ const ProductPage = async ({
 
     const product = await db.product.findUnique({
         where: {
-            id: params.productId
+            id: params.storeId
         },
         include: {
             images: true
@@ -18,7 +18,7 @@ const ProductPage = async ({
         console.log('no such products')
     }
 
-    const category = await db.category.findMany({
+    const categorys = await db.category.findMany({
         where: {
             storeId: params.storeId
         }
@@ -26,12 +26,9 @@ const ProductPage = async ({
 
     return (
         <div className="flex-col">
-            Dynamic Product Page
-            {params.storeId}
-            <div className="flex-1">
-
+            <div className="flex-1 space-y-4 p-8 pt-6">
+                <AddProduct initialData={product} categorys={categorys} />
             </div>
-            <AddProduct initialData={product} category={category} />
         </div>
     );
 }

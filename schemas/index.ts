@@ -4,6 +4,17 @@ export const storeSchema = z.object({
     storename: z.string(),
 })
 
+export const categorySchema = z.object({
+    categoryname: z.string(),
+    storeId: z.string(),
+    billboardId: z.string(),
+})
+
+export const billboardSchema = z.object({
+    label: z.string(),
+    imageUrl: z.string(),
+    storeId: z.string()
+})
 
 export const productSchema = z.object({
     productname: z.string(),

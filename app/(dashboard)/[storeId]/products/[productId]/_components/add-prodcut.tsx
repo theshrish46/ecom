@@ -8,16 +8,17 @@ import Header from '@/components/abstract-comps/header';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Category, Image, Product } from '@prisma/client';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 
 interface AddProdcutProps {
     initialData?: Product & { images: Image[] } | null,
-    category: Category[],
+    categorys: Category[],
 }
 
 
 const AddProduct = ({
-    category,
+    categorys,
     initialData
 }: AddProdcutProps) => {
 
@@ -35,39 +36,68 @@ const AddProduct = ({
 
 
     return (
-        <div className='flex items-center justify-between'>
+        <div>
             <Header title='Add Product' description='Add a new product' />
-            <div className='md:grid md:grid-cols-3 gap-8'>
+
+
+
+            <div>
                 <Form {...form}>
                     <form>
-                        <FormField
-                            name='prodcutname'
-                            control={form.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Prodcut Name</FormLabel>
-                                    <FormDescription>Name of your product</FormDescription>
-                                    <FormControl>
-                                        <Input {...field} placeholder='e.g Java Notes' />
-                                    </FormControl>
-                                </FormItem>
-                            )}
-                        />
+                        <div className='md:grid md:grid-cols-3 gap-x-5'>
 
-                        <FormField
-                            name='price'
-                            control={form.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Price</FormLabel>
-                                    <FormDescription>Enter a suitable price</FormDescription>
-                                    <FormControl>
-                                        <Input {...field} placeholder='e.g $5' type='number' />
-                                    </FormControl>
-                                </FormItem>
-                            )}
-                        />
+                            <FormField
+                                name='productname'
+                                control={form.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Prodcut Name</FormLabel>
+                                        <FormDescription>Name of your product</FormDescription>
+                                        <FormControl>
+                                            <Input {...field} placeholder='e.g Java Notes' />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
 
+                            <FormField
+                                name='price'
+                                control={form.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Price</FormLabel>
+                                        <FormDescription>Enter a suitable price</FormDescription>
+                                        <FormControl>
+                                            <Input {...field} placeholder='e.g $5' type='number' />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                name='categoryId'
+                                control={form.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Category</FormLabel>
+                                        <FormDescription>Select a category</FormDescription>
+                                        <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue defaultValue={field.value} placeholder="Select a category" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {categorys.map((category) => (
+                                                    <SelectItem key={category.id} value={category.id}>{category.categoryname}</SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </FormItem>
+                                )}
+                            />
+
+                        </div>
 
                     </form>
                 </Form>

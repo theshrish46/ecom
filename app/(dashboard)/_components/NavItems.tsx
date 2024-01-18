@@ -32,6 +32,16 @@ const NavItems = () => {
             href: `/${params.storeId}/sales`,
             active: pathname == `/${params.storeId}/sales`
         },
+        {
+            label: "Category",
+            href: `/${params.storeId}/category`,
+            active: pathname == `/${params.storeId}/category`
+        },
+        {
+            label: "Billboard",
+            href: `/${params.storeId}/billboard`,
+            active: pathname == `/${params.storeId}/billboard`
+        },
     ]
     return (
         <div className="hidden md:flex flex-col justify-center items-start space-y-5 my-10
