@@ -4,7 +4,7 @@ import BillboardForm from "./_components/billboard-form";
 const BillBoardPage = ({ params }: { params: { storeId: string, billboardId: string } }) => {
     return (
         <div>
-            <Header title="Billboard" description="Add new Billboards" />
+            <Header title="Billboard" description="Add new Billboards" headingClassName="text-lg md:text-3xl" />
             <BillboardForm />
         </div>
     );

@@ -13,7 +13,6 @@ export const categorySchema = z.object({
 export const billboardSchema = z.object({
     label: z.string(),
     imageUrl: z.string(),
-    storeId: z.string()
 })
 
 export const productSchema = z.object({

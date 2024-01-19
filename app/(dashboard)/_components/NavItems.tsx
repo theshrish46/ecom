@@ -49,13 +49,13 @@ const NavItems = () => {
         ">
             {
                 ROUTES.map((item) => (
-                    <Link href={item.href} className={cn(item.active ? "text-primary font-semibold" : "text-secondary-foreground font-semibold", "text-lg flex justify-center items-center")}>
+                    <Link href={item.href} key={item.label} className={cn(item.active ? "text-primary font-semibold" : "text-secondary-foreground font-semibold", "text-lg flex justify-center items-center")}>
                         {item.label}
                     </Link>
                 ))
             }
             <Button>Switch to buying</Button>
-            <UserButton afterSignOutUrl="/sign-in" />
+            <UserButton afterSignOutUrl="/" />
         </div>
     );
 }

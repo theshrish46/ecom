@@ -6,16 +6,17 @@ import React from "react";
 export default async function ({ children }: { children: React.ReactNode }) {
     const { userId } = await auth();
 
-
+    console.log(userId)
     if (!userId) {
         redirect("/sign-in")
     }
 
     const store = await db.store.findFirst({
         where: {
-            userId: userId,
+            userId: userId
         }
     })
+    console.log("store", store)
     const isAdmin = true
 
     if (isAdmin) {

@@ -13,12 +13,12 @@ const Header = ({
     paraClassName
 }: HeaderProps) => {
     return (
-        <div className="flex flex-col justify-center items-start gap-y-5">
+        <div className="flex flex-col justify-center items-start my-4">
             <h1
-                className={cn("text-xl text-primary md:text-5xl font-semibold", headingClassName)}>
+                className={cn("text-primary font-semibold", headingClassName)}>
                 {title}
             </h1>
-            <p className={cn("text-sm text-secondary-foreground md:text-lg font-medium", paraClassName)}>{description}</p>
+            <p className={cn("text-secondary-foreground font-medium", paraClassName)}>{description}</p>
         </div >
     );
 }
