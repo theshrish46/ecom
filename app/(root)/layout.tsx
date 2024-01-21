@@ -1,32 +1,12 @@
-import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
+import NavBar from "@/components/navbar";
+import { Separator } from "@/components/ui/separator";
 import React from "react";
 
-export default async function ({ children }: { children: React.ReactNode }) {
-    const { userId } = await auth();
-
-    console.log(userId)
-    if (!userId) {
-        redirect("/sign-in")
-    }
-
-    const store = await db.store.findFirst({
-        where: {
-            userId: userId
-        }
-    })
-    console.log("store", store)
-    const isAdmin = true
-
-    if (isAdmin) {
-        if (store) {
-            redirect(`/${store.id}`)
-        }
-    }
-
+export default async function Rootlayout({ children }: { children: React.ReactNode }) {
     return (
-        <div>
+        <div className="w-full h-full mx-auto">
+            <NavBar />
+            <Separator className="container mx-auto" />
             {children}
         </div>
     )
