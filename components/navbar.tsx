@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import logo from '@/public/assets/logo.svg'
-import { UserButton } from "@clerk/nextjs";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -48,7 +47,7 @@ const NavBar = () => {
                     </Button>
                 </div>
                 <div>
-                    <UserButton />
+
                 </div>
             </div>
         </div>

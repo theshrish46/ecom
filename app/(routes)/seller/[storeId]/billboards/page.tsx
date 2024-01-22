@@ -1,9 +1,26 @@
-const BillboardPage = () => {
+import { Button } from "@/components/ui/button";
+import BillboardClient from "./_components/client";
+import Header from "@/components/header";
+import { PlusIcon } from "@radix-ui/react-icons";
+import Link from "next/link";
+
+
+const BillboardsPage = ({ params }: { params: { storeId: string } }) => {
+
     return (
-        <div>
-            Billboard Page
+        <div className="flex flex-col justify-start items-start space-y-3">
+            <div className="w-full flex justify-between items-center">
+                <Header title="Billboard" description="This is a billboard page. You  can add and edit your billboards here." />
+                <Button className="flex justify-around items-center">
+                    <Link href={`/seller/${params.storeId}/billboards/new`} className="font-semibold flex justify-around items-center space-x-1">
+                        <span>Add new</span>
+                        <PlusIcon />
+                    </Link>
+                </Button>
+            </div>
+            <BillboardClient />
         </div>
     );
 }
 
-export default BillboardPage;
+export default BillboardsPage;
