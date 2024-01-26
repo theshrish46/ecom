@@ -1,47 +1,47 @@
-import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs";
-import { NextResponse } from "next/server";
+import { db } from "@/lib/db"
+import { billboardSchema } from "@/schema"
+import { auth } from "@clerk/nextjs"
+import { NextResponse } from "next/server"
 
 export async function POST(request: Request, { params }: { params: { storeId: string } }) {
     try {
-        const { userId } = auth()
-
-        if (!userId) {
-            return new NextResponse("User doesn't exists. Please login", { status: 403 })
-        }
-
-        if (!params.storeId) {
-            return new NextResponse("You must have a store to create the billboards", { status: 400 })
-        }
-
+        const { userId } = await auth()
         const body = await request.json()
-        const { label, imageUrl } = body
 
-        if (!label || !imageUrl) {
-            return new NextResponse("All fields are compulsory", { status: 402 })
+        const validatedFields = billboardSchema.safeParse(body)
+
+        if (!validatedFields.success) {
+            return new NextResponse("Invalid fields")
         }
-
-        const existingBillboard = await db.billboard.findMany({
+        const store = await db.store.findMany({
             where: {
-                storeId: params.storeId
+                id: params.storeId,
             }
         })
 
-        if (existingBillboard) {
-            return new NextResponse("Billboard with this name already exists. Please try something new", { status: 400 })
+        if (!store) {
+            return new NextResponse("No store exists please create a store to add a billboard")
         }
+        const { imageUrl, label } = validatedFields.data
 
         const billboard = await db.billboard.create({
             data: {
-                label: label,
+                name: label,
                 imageUrl: imageUrl,
-                storeId: params.storeId,
+                store: {
+                    connect: {
+                        id: params.storeId
+                    }
+                }
             }
         })
 
-        return NextResponse.json(billboard)
+        return new NextResponse("Billboard created")
+
+
 
     } catch (error) {
-        return new NextResponse("Something went wrong whle creating the billboard", { status: 400 })
+        console.log('[BILLBOARD ID POST ERROR]', error)
+        return new NextResponse("Error occured", { status: 400 })
     }
 }

@@ -10,60 +10,116 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  email    String
-  password String
-
-  store     Store[]  @relation("UserToStore")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
 model Store {
-  id        String      @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String
-  user      User        @relation("UserToStore", fields: [userId], references: [id])
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
   storename String
-  Billboard Billboard[] @relation("StoreToBillboard")
-  Category  Category[]  @relation("StoreToCategory")
+  userId    String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  category Category[] @relation("StoreToCategory")
+
+  products Product[] @relation("StoreToProduct")
+
+  Order   Order[] @relation("StoreToOrder")
+  orderId String? @db.ObjectId
+
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  Billboard Billboard[] @relation("StoreToBillboard")
 
   @@index([userId])
+  @@index([orderId])
+}
+
+model Product {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  productname String
+  description String
+  price       String
+  storeId     String
+  store       Store    @relation("StoreToProduct", fields: [storeId], references: [id])
+  categoryId  String
+  category    Category @relation("CategoryToProduct", fields: [categoryId], references: [id])
+
+  orderItem OrderItem[] @relation("ProductToOrderItem")
+  Image     Image[]
+
+  createAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([storeId])
+  @@index([categoryId])
 }
 
 model Billboard {
   id       String @id @default(auto()) @map("_id") @db.ObjectId
-  label    String
+  name     String
   imageUrl String
+  storeId  String
+  store    Store  @relation("StoreToBillboard", fields: [storeId], references: [id])
 
-  storeId String
-  store   Store  @relation("StoreToBillboard", fields: [storeId], references: [id])
+  category Category[] @relation("BillboardToCategory")
 
-  category Category[] @relation("CategoryToBillboard")
-
-  createdAt DateTime @default(now())
+  createAt  DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([storeId])
 }
 
 model Category {
-  id           String @id @default(auto()) @map("_id") @db.ObjectId
-  categoryname String
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
 
   storeId String
   store   Store  @relation("StoreToCategory", fields: [storeId], references: [id])
 
-  billboardId String
-  billboard   Billboard @relation("CategoryToBillboard", fields: [billboardId], references: [id])
+  product Product[] @relation("CategoryToProduct")
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  billboardId String
+  billboard   Billboard @relation("BillboardToCategory", fields: [billboardId], references: [id])
+  createAt    DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   @@index([storeId])
   @@index([billboardId])
+}
+
+model Order {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  phoneNo String
+  address String
+  isPaid  Boolean
+
+  storeId    String
+  store      Store       @relation("StoreToOrder", fields: [storeId], references: [id])
+  orderItems OrderItem[] @relation("OrderToOrderItem")
+
+  createAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([storeId])
+}
+
+model OrderItem {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  orderId   String
+  order     Order   @relation("OrderToOrderItem", fields: [orderId], references: [id])
+  productId String
+  product   Product @relation("ProductToOrderItem", fields: [productId], references: [id])
+
+  createAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
+  @@index([orderId])
+}
+
+model Image {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
 }

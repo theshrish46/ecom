@@ -6,11 +6,13 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import NavItems from "./nav-items";
+import { UserButton, useAuth } from "@clerk/nextjs";
 
 const NavBar = () => {
     const pathname = usePathname()
     const sellerMode = pathname.includes('/seller')
     const userMode = pathname.includes('/')
+    const { userId } = useAuth()
     return (
         <div className="container mx-auto h-16 flex justify-between items-center">
             <div className="flex justify-center items-center cursor-pointer">
@@ -47,7 +49,19 @@ const NavBar = () => {
                     </Button>
                 </div>
                 <div>
-
+                    {
+                        userId ? (
+                            <div>
+                                <UserButton />
+                            </div>
+                        ) : (
+                            <div>
+                                <Button>
+                                    Logint
+                                </Button>
+                            </div>
+                        )
+                    }
                 </div>
             </div>
         </div>

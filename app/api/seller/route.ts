@@ -1,7 +1,11 @@
-import { db } from "@/lib/db"
-import { storeSchema } from "@/schema"
-import { auth } from "@clerk/nextjs"
-import { NextResponse } from "next/server"
+import { db } from "@/lib/db";
+import { storeSchema } from "@/schema";
+import { auth } from "@clerk/nextjs";
+import { NextResponse } from "next/server";
+
+export async function GET(request: Request) {
+    return NextResponse.json({ msg: "Ok seller" })
+}
 
 export async function POST(request: Request) {
     try {
@@ -22,7 +26,7 @@ export async function POST(request: Request) {
 
         const { storename } = validatedFields.data
 
-        const existingStore = await db.store.findFirst({
+        const existingStore = await db.store.findMany({
             where: {
                 storename: storename
             }
@@ -39,7 +43,7 @@ export async function POST(request: Request) {
             }
         })
         console.log(store)
-        return NextResponse.json(store)
+        return new NextResponse("Store created")
 
     } catch (error) {
         console.log('[STORE POST ERROR IN API]', error)

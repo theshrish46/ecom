@@ -3,9 +3,23 @@ import BillboardClient from "./_components/client";
 import Header from "@/components/header";
 import { PlusIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
+import { db } from "@/lib/db";
+import { BillboardColumn } from "./_components/columns";
+import { format } from 'date-fns'
 
 
-const BillboardsPage = ({ params }: { params: { storeId: string } }) => {
+const BillboardsPage = async ({ params }: { params: { storeId: string } }) => {
+    const billboard = await db.billboard.findMany({
+        where: {
+            storeId: params.storeId
+        }
+    })
+
+    const formattedBillboard: BillboardColumn[] = billboard.map((item) => ({
+        id: item.id,
+        label: item.name,
+        createdAt: format(item.createAt, "MMMM do, yyyy")
+    }))
 
     return (
         <div className="flex flex-col justify-start items-start space-y-3">
@@ -18,7 +32,7 @@ const BillboardsPage = ({ params }: { params: { storeId: string } }) => {
                     </Link>
                 </Button>
             </div>
-            <BillboardClient />
+            <BillboardClient data={formattedBillboard} />
         </div>
     );
 }
