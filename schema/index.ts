@@ -17,7 +17,13 @@ export const storeSchema = z.object({
     storename: z.string().min(1, { message: "Store name cannot be empty" })
 })
 
+
 export const billboardSchema = z.object({
     label: z.string().min(1, { message: "Billboard Label Cannot be empaty" }),
     imageUrl: z.string()
+})
+
+export const categorySchema = z.object({
+    name: z.string().min(1, { message: "Category Name cannot be empty" }),
+    billboardId: z.string().min(1, { message: "Billboard be empty" })
 })

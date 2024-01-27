@@ -14,33 +14,45 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import axios from 'axios';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+import { Billboard } from '@prisma/client';
 
-const BillboardForm = () => {
+interface BillboardFormProps {
+    initialData: Billboard
+}
+
+const BillboardForm = ({
+    initialData
+}: BillboardFormProps) => {
     const [loading, setLoading] = useState(false);
     const params = useParams()
+    const router = useRouter()
 
     const form = useForm<z.infer<typeof billboardSchema>>({
         resolver: zodResolver(billboardSchema),
         defaultValues: {
-            label: "",
-            imageUrl: ""
+            label: initialData ? initialData.name : "",
+            imageUrl: initialData ? initialData.imageUrl : ""
         }
     })
 
     const onSubmit = async (values: z.infer<typeof billboardSchema>) => {
         console.log(values)
         try {
-
-            const response = await axios.post(`/api/store/${params.storeId}/billboard`, values)
-
-            const { data } = await response
-            console.log(data)
+            setLoading(true)
+            if (initialData) {
+                const response = await axios.patch(`/api/store/${params.storeId}/billboard/${params.billboardId}`, values)
+            } else {
+                const response = await axios.post(`/api/store/${params.storeId}/billboard`, values)
+            }
+            router.refresh()
+            router.push(`/seller/${params.storeId}/billboards`)
             toast.success("Successfully created the billboard")
 
         } catch (error) {
-            console.log("Something went wrong while creating the billboard")
             toast.error("Something went wroong while creating the billboard")
+        } finally {
+            setLoading(false)
         }
     }
 

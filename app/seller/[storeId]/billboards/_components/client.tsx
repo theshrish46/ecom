@@ -1,7 +1,7 @@
 "use client";
 
 import { BillboardColumn, columns } from "./columns";
-import { DataTable } from "./data-table";
+import { DataTable } from "../../../../../components/data-table";
 
 interface BillboardClientProps {
     data: BillboardColumn[]

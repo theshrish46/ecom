@@ -57,7 +57,9 @@ const NavBar = () => {
                         ) : (
                             <div>
                                 <Button>
-                                    Logint
+                                    <Link href={'/sign-in'}>
+                                        Login
+                                    </Link>
                                 </Button>
                             </div>
                         )
