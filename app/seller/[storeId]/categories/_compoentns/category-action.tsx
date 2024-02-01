@@ -30,9 +30,10 @@ const CategoryAction = ({
     const onDelete = async () => {
         try {
             setLoading(true)
-            await axios.delete(`/api/${params.storeId}/category/${params.categoryId}`)
+            await axios.delete(`/api/store/${params.storeId}/category/${data.id}`)
             toast.success("Deleted successfully")
             router.refresh()
+            setOpen(false)
             router.push(`/seller/${params.storeId}/categories`)
         } catch (error) {
             toast.error("Category Deleted successfully")
@@ -70,7 +71,7 @@ const CategoryAction = ({
 
                     <DropdownMenuItem
                         disabled={loading}
-                        onClick={() => router.push(`/seller/${params.storeId}/categories/${params.categoryId}`)}
+                        onClick={() => router.push(`/seller/${params.storeId}/categories/${data.id}`)}
                         className="flex space-x-3"
                     >
                         <Pencil1Icon />

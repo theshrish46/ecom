@@ -51,7 +51,7 @@ const BillAction = ({
             />
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button disabled={loading} variant={'outline'}>
+                    <Button disabled={loading} variant={'outline'} >
                         <span className="sr-only">Open Menu</span>
                         <HamburgerMenuIcon />
                     </Button>
@@ -63,22 +63,28 @@ const BillAction = ({
                     <DropdownMenuItem
                         disabled={loading}
                         onClick={() => onCopy(data.id)}
+                        className="flex space-x-1 justify-start items-center"
                     >
-                        <CopyIcon />Copy Id
+                        <CopyIcon />
+                        <span>Copy Id</span>
                     </DropdownMenuItem>
 
                     <DropdownMenuItem
                         disabled={loading}
                         onClick={() => router.push(`/seller/${params.storeId}/billboards/${data.id}`)}
+                        className="flex space-x-1 justify-start items-center"
                     >
-                        <Pencil1Icon />Edit
+                        <Pencil1Icon />
+                        <span>Edit</span>
                     </DropdownMenuItem>
 
                     <DropdownMenuItem
                         disabled={loading}
                         onClick={() => setOpen(true)}
+                        className="flex space-x-1 justify-start items-center"
                     >
-                        <TrashIcon />Delete
+                        <TrashIcon />
+                        <span>Delete</span>
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>

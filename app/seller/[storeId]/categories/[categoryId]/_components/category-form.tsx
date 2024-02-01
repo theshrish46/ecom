@@ -13,7 +13,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import axios from 'axios';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Billboard, Category } from '@prisma/client';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
@@ -28,25 +28,29 @@ const CategoryForm = ({
     billboards
 }: CategoryFormProps) => {
     const [loading, setLoading] = useState(false);
+    const router = useRouter()
     const params = useParams()
 
     const form = useForm<z.infer<typeof categorySchema>>({
         resolver: zodResolver(categorySchema),
         defaultValues: {
-            name: "",
-            billboardId: ""
+            name: initialData ? initialData.name : "",
+            billboardId: initialData ? initialData.billboardId : ""
         }
     })
 
     const onSubmit = async (values: z.infer<typeof categorySchema>) => {
         console.log(values)
         try {
+            if (initialData) {
+                const response = await axios.patch(`/api/store/${params.storeId}/category/${params.categoryId}`, values)
+            } else {
+                const response = await axios.post(`/api/store/${params.storeId}/category`, values)
+            }
 
-            const response = await axios.post(`/api/store/${params.storeId}/category`, values)
-
-            const { data } = await response
-            console.log(data)
             toast.success("Successfully created the billboard")
+            router.refresh()
+            router.push(`/seller/${params.storeId}/categories`)
 
         } catch (error) {
             console.log("Something went wrong while creating the billboard")

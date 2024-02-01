@@ -14,9 +14,9 @@ const NavItems = () => {
             active: pathname === `/${params.storeId}/overview`
         },
         {
-            label: "Products",
-            href: "/products",
-            active: pathname === `/${params.storeId}/products`
+            label: "Billboards",
+            href: "/billboards",
+            active: pathname === `/${params.storeId}/billboards`
         },
         {
             label: "Categories",
@@ -24,9 +24,9 @@ const NavItems = () => {
             active: pathname === `/${params.storeId}/categories`
         },
         {
-            label: "Billboards",
-            href: "/billboards",
-            active: pathname === `/${params.storeId}/billboards`
+            label: "Products",
+            href: "/products",
+            active: pathname === `/${params.storeId}/products`
         },
         {
             label: "Sales",
@@ -37,7 +37,7 @@ const NavItems = () => {
     return (
         <div className="flex justify-center items-center space-x-3">
             {routes.map((item) => (
-                <Link href={`/seller/${params.storeId}/${item.href}`} className="text-sm">
+                <Link key={item.href} href={`/seller/${params.storeId}/${item.href}`} className="text-sm">
                     {item.label}
                 </Link>
             ))}

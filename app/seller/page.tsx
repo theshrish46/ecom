@@ -20,7 +20,7 @@ const SellerPage = async ({ params }: { params: { storeId: string } }) => {
         <div>
             {
                 store?.map((item) => (
-                    <Link href={`/seller/${item.id}`} className="px-2 py-4 border-2 border-gray-400 shadow-md w-[400px] flex justify-center items-start flex-col space-y-3">
+                    <Link key={item.id} href={`/seller/${item.id}`} className="px-2 py-4 border-2 border-gray-400 shadow-md w-[400px] flex justify-center items-start flex-col space-y-3">
                         <div>{item.id}</div>
                         <div>{item.userId}</div>
                         <div>{item.storename}</div>
