@@ -31,23 +31,44 @@ model Store {
 }
 
 model Product {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
   productname String
   description String
-  price       String
-  storeId     String
-  store       Store    @relation("StoreToProduct", fields: [storeId], references: [id])
-  categoryId  String
-  category    Category @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  price       Float
+  productUrl  String
+  totalOrder  Int    @default(0)
 
-  orderItem OrderItem[] @relation("ProductToOrderItem")
-  Image     Image[]
+  storeId String
+  store   Store  @relation("StoreToProduct", fields: [storeId], references: [id])
+
+  categoryId String
+  category   Category @relation("CategoryToProduct", fields: [categoryId], references: [id])
+
+  ratings Ratings[] @relation("ProductToRating")
+
+  orderItems OrderItem[] @relation("ProductToOrderItem")
+  images     Image[]
+
+  isFeatured Boolean
+  isArchived Boolean
 
   createAt  DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([storeId])
   @@index([categoryId])
+}
+
+model Ratings {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  ratings Int
+  reviews String
+
+  productId String  @db.ObjectId
+  Product   Product @relation("ProductToRating", fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Billboard {
@@ -76,9 +97,9 @@ model Category {
 
   billboardId String
   billboard   Billboard @relation("BillboardToCategory", fields: [billboardId], references: [id])
-  
-  createAt    DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+
+  createAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([storeId])
   @@index([billboardId])

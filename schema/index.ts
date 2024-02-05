@@ -31,7 +31,7 @@ export const categorySchema = z.object({
 export const productSchema = z.object({
     name: z.string().min(1, { message: "Product name cannot be empty" }),
     description: z.string(),
-    imageUrl: z.object({ url: z.string() }).array(),
+    images: z.object({ url: z.string() }).array(),
     price: z.coerce.number().min(1),
     isFeatured: z.boolean().optional(),
     isArchived: z.boolean().optional(),

@@ -7,8 +7,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import NavItems from "./nav-items";
 import { UserButton, useAuth } from "@clerk/nextjs";
+import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet";
+import { useCartStore } from "@/hooks/use-cart-store";
 
 const NavBar = () => {
+    const count = useCartStore((state) => state.cart.length)
+
     const pathname = usePathname()
     const sellerMode = pathname.includes('/seller')
     const userMode = pathname.includes('/')
@@ -64,6 +69,43 @@ const NavBar = () => {
                             </div>
                         )
                     }
+                </div>
+                <div>
+                    <Sheet>
+                        <SheetTrigger asChild>
+                            <Button variant={'outline'}>
+                                <HamburgerMenuIcon />
+                            </Button>
+                        </SheetTrigger>
+                        <SheetContent className="flex flex-col justify-between items-start w-full">
+                            <SheetHeader>
+                                <SheetTitle>Cart {count}</SheetTitle>
+                                <SheetDescription>Your cart</SheetDescription>
+                            </SheetHeader>
+
+                            <div>
+                                cart item
+                            </div>
+                            <div>
+                                cart item
+                            </div>
+                            <div>
+                                cart item
+                            </div>
+                            <div>
+                                cart item
+                            </div>
+                            <div>
+                                cart item
+                            </div>
+
+                            <SheetFooter>
+                                <Button>
+                                    Proceed to Pay
+                                </Button>
+                            </SheetFooter>
+                        </SheetContent>
+                    </Sheet>
                 </div>
             </div>
         </div>

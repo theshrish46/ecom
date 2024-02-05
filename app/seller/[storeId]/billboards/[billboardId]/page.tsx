@@ -1,15 +1,27 @@
 import { db } from "@/lib/db";
 import BillboardForm from "./_components/billboard-form";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Billboards",
+    description: "Billboards page",
+};
 
 const BillboardPage = async ({ params }: { params: { billboardId: string, storeId: string } }) => {
-    const initialBillboard = await db.billboard.findUnique({
-        where: {
-            id: params.billboardId
-        }
-    })
+    let billboard
+    if (params.billboardId !== 'new') {
+
+
+        billboard = await db.billboard.findUnique({
+            where: {
+                id: params.billboardId
+            }
+        })
+
+    }
     return (
         <div className="py-8">
-            <BillboardForm initialData={initialBillboard} />
+            <BillboardForm initialData={billboard} />
         </div>
     );
 }

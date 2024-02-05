@@ -6,7 +6,12 @@ import Link from "next/link";
 import { db } from "@/lib/db";
 import { BillboardColumn } from "./_components/columns";
 import { format } from 'date-fns'
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+    title: "Billboard",
+    description: "Add and manage the Billboards",
+  };
 
 const BillboardsPage = async ({ params }: { params: { storeId: string } }) => {
     const billboard = await db.billboard.findMany({

@@ -19,6 +19,8 @@ import { UploadButton } from "@/utils/uploadthing";
 import { UploadDropzone } from "@uploadthing/react";
 import { OurFileRouter } from "@/app/api/uploadthing/core";
 import FileUploader from "@/components/ui/file-uploader";
+import axios from "axios";
+import { Textarea } from "@/components/ui/textarea";
 
 
 interface ProductFormProps {
@@ -33,13 +35,18 @@ const ProductForm = ({ category, initialData }: ProductFormProps) => {
     const router = useRouter()
     const params = useParams()
 
+
     const form = useForm<z.infer<typeof productSchema>>({
         resolver: zodResolver(productSchema),
-        defaultValues: {
+        defaultValues: initialData ? {
+            ...initialData,
+            name: initialData.productname,
+            price: parseFloat(String(initialData.price))
+        } : {
             name: "",
             categoryId: "",
             description: "",
-            imageUrl: [],
+            images: [],
             isArchived: false,
             isFeatured: false,
             price: 0,
@@ -47,10 +54,30 @@ const ProductForm = ({ category, initialData }: ProductFormProps) => {
         }
     })
 
+    const onSubmit = async (values: z.infer<typeof productSchema>) => {
+        console.log(values)
+        try {
+            if (initialData) {
+                const response = await axios.patch(`/api/store/${params.storeId}/product/${params.productId}`, values)
+            } else {
+                console.log('entered the post api route ')
+                const response = await axios.post(`/api/store/${params.storeId}/product`, values)
+            }
+
+            router.refresh()
+            router.push(`/seller/${params.storeId}/products`)
+
+        } catch (error) {
+            console.log('[API ERROR]', error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
     return (
         <div>
             <Form {...form}>
-                <form className="space-y-8 w-full">
+                <form className="space-y-8 w-full" onSubmit={form.handleSubmit(onSubmit)}>
                     <div className="md:grid md:grid-cols-3 md:gap-10">
 
                         <FormField
@@ -100,11 +127,24 @@ const ProductForm = ({ category, initialData }: ProductFormProps) => {
                                 </FormItem>
                             )}
                         />
+
+                        <FormField
+                            name="description"
+                            control={form.control}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Description</FormLabel>
+                                    <FormControl>
+                                        <Textarea {...field} placeholder="Enter description" disabled={loading} className="resize-none" />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
                     </div>
 
                     <div>
                         <FormField
-                            name="imageUrl"
+                            name="images"
                             control={form.control}
                             render={({ field }) => (
                                 <FormItem>
@@ -181,7 +221,7 @@ const ProductForm = ({ category, initialData }: ProductFormProps) => {
                             )}
                         />
                     </div>
-                    <Button>
+                    <Button type="submit">
                         {initialData ? "Update" : "Create"}
                     </Button>
                 </form>

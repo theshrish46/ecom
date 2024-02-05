@@ -1,6 +1,12 @@
 import Header from "@/components/header";
 import CategoryForm from "./_components/category-form";
 import { db } from "@/lib/db";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Category",
+    description: "Add and manage the Categories",
+  };
 
 const CategoryPage = async ({ params }: { params: { categoryId: string, storeId: string } }) => {
 

@@ -18,7 +18,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { Billboard } from '@prisma/client';
 
 interface BillboardFormProps {
-    initialData: Billboard
+    initialData?: Billboard | null
 }
 
 const BillboardForm = ({

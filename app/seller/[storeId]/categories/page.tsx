@@ -5,6 +5,12 @@ import { format } from "date-fns";
 import Header from "@/components/header";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Category",
+    description: "Category Page",
+  };
 
 const CategoryPage = async ({ params }: { params: { storeId: string } }) => {
     const category = await db.category.findMany({
