@@ -1,68 +1,38 @@
-import { Product } from "@prisma/client"
-import { create } from "zustand"
+import { create } from "zustand";
+import { createJSONStorage, persist } from 'zustand/middleware'
 
-interface CartItem extends Product {
-    count: number
-}
+import { Product } from "@prisma/client";
+import { toast } from "sonner";
 
-interface CartStoreType {
-    cart: CartItem[]
-    count: () => number
-    add: (product: Product) => void
-    remove: (id: string) => void
+interface UseCartStoreType {
+    items: Product[]
+    addItem: (data: Product) => void
+    removeItem: (id: string) => void
     removeAll: () => void
 }
 
-export const useCartStore = create<CartStoreType>((set, get) => ({
-    cart: [],
-    count: () => {
-        const { cart } = get()
-        if (cart.length) {
-            return cart.map((item) => item.count).reduce((prev, cur) => prev + cur)
-        }
-        return 0
-    },
 
-    add: (product: Product) => {
-        const { cart } = get()
-        const updatedCart = updateCart(product, cart)
-        set({ cart: updatedCart })
-    },
-    remove: (id: string) => {
-        const { cart } = get()
-        const updatedCart = removeCart(id, cart)
-        set({ cart: updatedCart })
-    },
-    removeAll: () => set({ cart: [] })
-}))
+const useCart = create(
+    persist<UseCartStoreType>((set, get) => ({
+        items: [],
+        addItem: (data: Product) => {
+            const currentItems = get().items;
+            const existingItem = currentItems.find((item) => item.id === data.id);
 
-function updateCart(product: Product, cart: CartItem[]): CartItem[] {
-
-    const cartItem = { ...product, count: 1 } as CartItem
-    const productOnCart = cart.map((item) => item.id).includes(product.id)
-
-    if (!productOnCart) {
-        cart.push(cartItem)
-    }
-    else {
-        cart.map((item) => {
-            if (item.id === product.id) {
-                return { ...item, count: item.count + 1 } as CartItem
+            if (existingItem) {
+                return toast('Item already in cart.');
             }
-            return item
-        })
-    }
-    return cart
-}
 
-
-function removeCart(id: string, cart: CartItem[]): CartItem[] {
-    return cart.map((item) => {
-        if (item.id === id) {
-            return { ...item, count: item.count - 1 }
-        }
-        return item
-    }).filter(item => {
-        return item.count
-    })
-}
+            set({ items: [...get().items, data] });
+            toast.success('Item added to cart.');
+        },
+        removeItem: (id: string) => {
+            set({ items: [...get().items.filter((item) => item.id !== id)] });
+            toast.success('Item removed from cart.');
+        },
+        removeAll: () => set({ items: [] }),
+    }), {
+        name: 'cart-storage',
+        storage: createJSONStorage(() => localStorage)
+    }));
+export default useCart;

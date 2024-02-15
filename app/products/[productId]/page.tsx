@@ -17,9 +17,18 @@ const ProductPage = async ({ params }: { params: { productId: string } }) => {
         }
     })
 
+    const relatedProducts = await db.product.findMany({
+        where: {
+            categoryId: product?.categoryId
+        },
+        include: {
+            images: true
+        }
+    })
+
     return (
-        <div className="container">
-            <ProductPageClient data={product} ratings={review} />
+        <div className="container h-full py-10">
+            <ProductPageClient data={product} ratings={review} relatedProducts={relatedProducts} />
         </div>
     );
 }
