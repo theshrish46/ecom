@@ -37,8 +37,6 @@ const CartCard = ({ productData }: CartCardProps) => {
 
 
     const redirectToCheckout = async () => {
-        console.log("Inside the function")
-
         const response = await axios.post(`/api/store/${productData.storeId}/checkout`, {
             productIds: items.map((item) => item.id)
         })
@@ -50,10 +48,10 @@ const CartCard = ({ productData }: CartCardProps) => {
 
 
     return (
-        <div className="bg-gray-200/50 w-8/12 mx-auto my-10 px-4 py-3 flex justify-between items-start rounded-lg">
+        <div className="bg-gray-200/50 w-8/12 mx-auto my-4 px-4 py-3 flex justify-between items-start rounded-lg">
             <div className="w-full flex justify-start items-start space-x-10">
                 <div className="my-2">
-                    <Image src={productData.images[0].url} alt="Images" width={300} height={300} />
+                    <Image src={productData.images[0].url} alt="Images" width={300} height={300} className="object-fill max-h-52"/>
                 </div>
 
                 <div className="flex flex-col justify-start items-start space-y-5">

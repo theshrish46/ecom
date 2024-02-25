@@ -14,7 +14,7 @@ export async function OPTIONS() {
 }
 
 export async function POST(req: Request, { params }: { params: { storeId: string } }) {
-    const { productIds } = await req.json()
+    const { productIds, phNo, address } = await req.json()
     console.log("Inside the api")
     console.log(productIds)
     console.log(typeof productIds)
@@ -33,6 +33,12 @@ export async function POST(req: Request, { params }: { params: { storeId: string
 
     const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = []
 
+
+    products.map((item) => {
+        console.log(item.price)
+        console.log(typeof item.price)
+    })
+
     products.forEach((product) => {
         line_items.push({
             quantity: 1,
@@ -41,7 +47,7 @@ export async function POST(req: Request, { params }: { params: { storeId: string
                 product_data: {
                     name: product.productname,
                 },
-                unit_amount: product.price
+                unit_amount: product.price * 100,
             }
         })
     })
@@ -49,8 +55,8 @@ export async function POST(req: Request, { params }: { params: { storeId: string
     const order = await db.order.create({
         data: {
             storeId: params.storeId,
-            address: "",
-            phoneNo: "",
+            address: address,
+            phoneNo: phNo,
             isPaid: false,
             orderItems: {
                 create: productIds.map((productId: string) => ({
