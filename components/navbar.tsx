@@ -9,12 +9,12 @@ import NavItems from "./nav-items";
 import { UserButton, useAuth } from "@clerk/nextjs";
 import { ShoppingCart } from 'lucide-react'
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet";
-import useCart from "@/hooks/use-cart-store";
 import SheetProductPage from "./sheet-product-cart";
 import { ScrollArea } from "./ui/scroll-area";
 
 import emptycart from '@/public/assets/emptycart.svg'
 import { cn } from "@/lib/utils";
+import useCart from "@/hooks/use-cart-store";
 
 const NavBar = () => {
     const cart = useCart()
@@ -30,9 +30,9 @@ const NavBar = () => {
     return (
 
         <div className="container mx-auto h-16 flex justify-between items-center">
-            <div className="flex justify-center items-center cursor-pointer">
+            <Link href={'/'} className="flex justify-center items-center cursor-pointer">
                 <Image src={logo} alt="Logo image" className="h-28 w-28 p-0" />
-            </div>
+            </Link>
 
             <div>
                 {

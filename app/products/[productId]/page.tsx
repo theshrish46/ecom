@@ -1,36 +1,22 @@
 import { db } from "@/lib/db";
-import ProductPageClient from "./_components/product-page";
+import ProductPageClient from "./_components/product-page-client";
 
 const ProductPage = async ({ params }: { params: { productId: string } }) => {
-    const product = await db.product.findUnique({
+    const product = await db.product.findFirst({
         where: {
             id: params.productId
         },
         include: {
-            images: true
+            images: true,
+            category: true,
+            store: true
         }
     })
-
-    const review = await db.ratings.findMany({
-        where: {
-            productId: params.productId
-        }
-    })
-
-    const relatedProducts = await db.product.findMany({
-        where: {
-            categoryId: product?.categoryId
-        },
-        include: {
-            images: true
-        }
-    })
-
     return (
-        <div className="container h-full py-10">
-            <ProductPageClient data={product} ratings={review} relatedProducts={relatedProducts} />
+        <div className="my-4 px-5">
+            <ProductPageClient data={product} key={product?.id} />
         </div>
-    );
+    )
 }
 
 export default ProductPage;

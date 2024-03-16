@@ -14,7 +14,7 @@ export async function OPTIONS() {
 }
 
 export async function POST(req: Request, { params }: { params: { storeId: string } }) {
-    const { productIds, phNo, address } = await req.json()
+    const { productIds } = await req.json()
     console.log("Inside the api")
     console.log(productIds)
     console.log(typeof productIds)
@@ -55,8 +55,8 @@ export async function POST(req: Request, { params }: { params: { storeId: string
     const order = await db.order.create({
         data: {
             storeId: params.storeId,
-            address: address,
-            phoneNo: phNo,
+            phoneNo: "",
+            address: "",
             isPaid: false,
             orderItems: {
                 create: productIds.map((productId: string) => ({
@@ -73,10 +73,15 @@ export async function POST(req: Request, { params }: { params: { storeId: string
     const session = await stripe.checkout.sessions.create({
         line_items,
         mode: "payment",
+        billing_address_collection: "required",
         phone_number_collection: {
             enabled: true,
         },
-        success_url: `${process.env.STRIPE_SUCCESS_URL}/cart/success`
+        success_url: `${process.env.STRIPE_SUCCESS_URL}/cart/success`,
+        cancel_url: `${process.env.STRIPE_SUCCESS_URL}/cart/cancel`,
+        metadata: {
+            orderId: order.id,
+        }
     })
     return NextResponse.json({
         url: session.url
