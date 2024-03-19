@@ -74,6 +74,31 @@ export default async function Home() {
 
       <Separator className="my-4 w-11/12 mx-auto" />
 
+      {
+        products.map((item) => (
+          <>
+            {item.isArchived === true && (
+
+              <section className="w-11/12 mx-auto my-4 grid sm:grid-cols-7 gap-x-3">
+                <h1 className="text-2xl font-medium my-2 col-span-7">Recently Bought</h1>
+                <p className="text-sm font-medium text-gray-700 col-span-7 my-2">Share your reviews here</p>
+                {
+                  products.map((item) => (
+                    <>
+                      {
+                        item.isArchived === true && (
+                          <ProductList data={item} key={item.id} />
+                        )
+                      }
+                    </>
+                  ))
+                }
+              </section>
+            )}
+          </>
+        ))
+      }
+
 
 
       {/* <div className="grid grid-cols-2 gap-3 md:grid-cols-3">

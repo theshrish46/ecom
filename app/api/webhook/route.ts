@@ -6,7 +6,7 @@ import { db } from '@/lib/db'
 
 export async function POST(req: Request) {
     const body = await req.json();
-    const signature = headers().get("Stripe-Signature") as string;
+    const signature = req.headers.get("stripe-signature") as string;
 
     let event: Stripe.Event;
 
@@ -16,7 +16,9 @@ export async function POST(req: Request) {
             signature,
             process.env.STRIPE_WEBHOOK_SECRET!
         )
+        console.log("Stripe Web Hook executed")
     } catch (error: any) {
+        console.log("Stripe WebHook error: ", error)
         return new NextResponse(`Webhooks Error ${error.message}`, { status: 400 })
     }
 
@@ -37,7 +39,7 @@ export async function POST(req: Request) {
     if (event.type === 'checkout.session.completed') {
         const order = await db.order.update({
             where: {
-                id: session.metadata?.orderId,
+                id: session?.metadata?.orderId,
             },
             data: {
                 isPaid: true,
@@ -62,4 +64,10 @@ export async function POST(req: Request) {
         })
     }
     return new NextResponse(null, { status: 200 })
+}
+
+export const config = {
+    api: {
+        bodyParser: false,
+    }
 }

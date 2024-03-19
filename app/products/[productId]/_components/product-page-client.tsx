@@ -105,7 +105,7 @@ const ProductPageClient = ({ data }: ProductPageProps) => {
 
             </div>
 
-        </div >
+        </div>
     )
 }
 
