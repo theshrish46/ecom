@@ -58,7 +58,7 @@ export default async function Home() {
 
       {/* TODO: Featured Products List */}
 
-      <section className="w-11/12 mx-auto my-4 grid sm:grid-cols-7 gap-x-3">
+      <section className="w-11/12 mx-auto my-4 grid sm:grid-cols-7 gap-x-1">
         <h1 className="col-span-7 text-2xl font-medium my-2">Featured Products</h1>
         {
           products.map((item) => (

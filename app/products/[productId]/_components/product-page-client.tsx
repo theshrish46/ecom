@@ -5,7 +5,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Separator } from "@/components/ui/separator";
 import useCart from "@/hooks/use-cart-store";
 import { Product } from "@/types";
-import { ShoppingBag, Star, StarIcon } from "lucide-react";
+import { ShoppingBag, StarIcon } from "lucide-react";
 import Image from "next/image";
 
 interface ProductPageProps {
@@ -30,6 +30,7 @@ const ProductPageClient = ({ data }: ProductPageProps) => {
             <div className="w-full mx-auto px-4">
                 <h2 className="text-xl sm:text-4xl font-medium tracking-normal my-4">{data.productname}</h2>
                 <p className="text-lg leading-5 tracking-normal my-3">{data.description}</p>
+
 
                 <div className="my-4">
                     <div className="flex justify-start items-center my-4">

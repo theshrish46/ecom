@@ -15,6 +15,7 @@ const ProductList = ({ data }: ProductListProps) => {
         <Link
             href={`/products/${data.id}`}
             className="
+                    my-1
                     max-w-[230px] min-h-[250px]
                     hover:cursor-pointer
                 "
@@ -24,7 +25,7 @@ const ProductList = ({ data }: ProductListProps) => {
                     <CardTitle>{data.productname}</CardTitle>
                 </CardHeader>
                 <div className="w-full">
-                    <Image src={data.images[0].url} alt="Image" height={100} width={100} className="w-full h-36" />
+                    <Image src={data.images[0]?.url} alt="Image" height={100} width={100} className="w-full h-36" />
                 </div>
                 <CardFooter className="text-sm">
                     {data.ratings.length}
